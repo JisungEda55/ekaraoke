@@ -232,27 +232,28 @@
         let searchResults = [];
 
         function searchMusic() {
-            const query = document.getElementById('search-input').value.trim();
-            if (!query) {
-                alert('검색어를 입력하세요.');
-                return;
-            }
+    const query = document.getElementById('search-input').value.trim();
+    if (!query) {
+        alert('검색어를 입력하세요.');
+        return;
+    }
 
-            const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=musicTrack&attribute=songTerm&limit=10&country=KR`;
-            const resultsContainer = document.getElementById('results');
-            resultsContainer.innerHTML = '<p>검색 중...</p>';
+    // 검색 필드를 노래 제목과 아티스트 이름으로 설정하고, 결과 개수를 20개로 확장
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=musicTrack&attribute=mixTerm&limit=20&country=KR`;
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = '<p>검색 중...</p>';
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    searchResults = data.results.sort((a, b) => b.trackCount - a.trackCount);
-                    displayResults(searchResults);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    resultsContainer.innerHTML = '<p>데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.</p>';
-                });
-        }
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            searchResults = data.results.sort((a, b) => b.trackCount - a.trackCount);
+            displayResults(searchResults);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            resultsContainer.innerHTML = '<p>데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.</p>';
+        });
+}
 
         function displayResults(results) {
             const resultsContainer = document.getElementById('results');
